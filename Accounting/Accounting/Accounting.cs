@@ -41,11 +41,11 @@ namespace Accounting
                 }
                 else if (budget.YearMonth == yearMonthStart)
                 {
-                    budgetSum += CalculateBudgetSum(start, GetEndDayOfMonth(start), budget.Amount);
+                    budgetSum += CalculateBudgetSum(start, GetLastDay(start), budget.Amount);
                 }
                 else if (budget.YearMonth == yearMonthEnd)
                 {
-                    budgetSum += CalculateBudgetSum(GetStartDayOfMonth(end), end, budget.Amount);
+                    budgetSum += CalculateBudgetSum(GetFirstDay(end), end, budget.Amount);
                 }
                 else
                 {
@@ -67,12 +67,12 @@ namespace Accounting
                 .ToList();
         }
 
-        private DateTime GetStartDayOfMonth(DateTime end)
+        private DateTime GetFirstDay(DateTime end)
         {
             return new DateTime(end.Year, end.Month, 1);
         }
 
-        private DateTime GetEndDayOfMonth(DateTime start)
+        private DateTime GetLastDay(DateTime start)
         {
             return new DateTime(start.Year, start.Month, 1).AddMonths(1).AddDays(-1);
         }
