@@ -32,17 +32,19 @@ namespace Accounting
                 .Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
                 .ToList();
 
-            if (yearMonthStart == yearMonthEnd)
+            if (!budgetList.Any())
             {
-                var budgetAmount = budgetList.FirstOrDefault()?.Amount ?? 0;
-                var budgetSum = CalculateBudgetSum(start, end, budgetAmount);
-                return budgetSum;
+                return 0;
             }
 
             var sum = 0m;
             foreach (var budget in budgetList)
             {
-                if (budget.YearMonth == yearMonthStart)
+                if (yearMonthStart == yearMonthEnd)
+                {
+                    sum += CalculateBudgetSum(start, end, budget?.Amount ?? 0);
+                }
+                else if (budget.YearMonth == yearMonthStart)
                 {
                     sum += CalculateBudgetSum(start, GetEndDayOfMonth(start), budget.Amount);
                 }

@@ -46,7 +46,7 @@ namespace AccountingTests
         }
 
         [Test]
-        public void test_StartDate_Graterthan_EndDate_Budget()
+        public void test_StartDate_GreaterThan_EndDate_Budget()
         {
             var queryBudget = _sut.QueryBudget(new DateTime(2021, 12, 31), new DateTime(2021, 12, 1));
             QueryBudgetShouldBe(queryBudget, 0);
