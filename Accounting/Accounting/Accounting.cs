@@ -61,25 +61,25 @@ namespace Accounting
             return sum;
         }
 
-        private static DateTime GetStartDayOfMonth(DateTime end)
+        private DateTime GetStartDayOfMonth(DateTime end)
         {
             return new DateTime(end.Year, end.Month, 1);
         }
 
-        private static DateTime GetEndDayOfMonth(DateTime start)
+        private DateTime GetEndDayOfMonth(DateTime start)
         {
             return new DateTime(start.Year, start.Month, 1).AddMonths(1).AddDays(-1);
         }
 
-        private static int CalculateBudgetSum(DateTime start, DateTime end, int budgetAmount)
+        private int CalculateBudgetSum(DateTime start, DateTime end, int budgetAmount)
         {
             var daysInMonth = DateTime.DaysInMonth(start.Year, start.Month);
-            var days = QueryDays(start, end);
+            var days = CalculateDiffDays(start, end);
             var budgetSum = budgetAmount * days / daysInMonth;
             return budgetSum;
         }
 
-        private static int QueryDays(DateTime start, DateTime end)
+        private int CalculateDiffDays(DateTime start, DateTime end)
         {
             return end.DayOfYear - start.DayOfYear + 1;
         }
