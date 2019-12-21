@@ -17,9 +17,11 @@ namespace Accounting
 
         public decimal QueryBudget(DateTime start, DateTime end)
         {
+            var budgetSum = 0m;
+
             if (start > end)
             {
-                return 0;
+                return budgetSum;
             }
 
             var yearMonthStart = Convert.ToInt32(start.ToString("yyyyMM"));
@@ -34,31 +36,30 @@ namespace Accounting
 
             if (!budgetList.Any())
             {
-                return 0;
+                return budgetSum;
             }
-
-            var sum = 0m;
+            
             foreach (var budget in budgetList)
             {
                 if (yearMonthStart == yearMonthEnd)
                 {
-                    sum += CalculateBudgetSum(start, end, budget?.Amount ?? 0);
+                    budgetSum += CalculateBudgetSum(start, end, budget?.Amount ?? 0);
                 }
                 else if (budget.YearMonth == yearMonthStart)
                 {
-                    sum += CalculateBudgetSum(start, GetEndDayOfMonth(start), budget.Amount);
+                    budgetSum += CalculateBudgetSum(start, GetEndDayOfMonth(start), budget.Amount);
                 }
                 else if (budget.YearMonth == yearMonthEnd)
                 {
-                    sum += CalculateBudgetSum(GetStartDayOfMonth(end), end, budget.Amount);
+                    budgetSum += CalculateBudgetSum(GetStartDayOfMonth(end), end, budget.Amount);
                 }
                 else
                 {
-                    sum += budget.Amount;
+                    budgetSum += budget.Amount;
                 }
             }
 
-            return sum;
+            return budgetSum;
         }
 
         private DateTime GetStartDayOfMonth(DateTime end)
