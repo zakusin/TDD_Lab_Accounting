@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting", "Accounting\Accounting.csproj", "{3459BB4A-2684-402D-8936-69D0F362CF9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingTests", "AccountingTests\AccountingTests.csproj", "{A6B9BC7D-2CF1-4CC5-A8CD-421A7D89B70F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3459BB4A-2684-402D-8936-69D0F362CF9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3459BB4A-2684-402D-8936-69D0F362CF9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3459BB4A-2684-402D-8936-69D0F362CF9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B9BC7D-2CF1-4CC5-A8CD-421A7D89B70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B9BC7D-2CF1-4CC5-A8CD-421A7D89B70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B9BC7D-2CF1-4CC5-A8CD-421A7D89B70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B9BC7D-2CF1-4CC5-A8CD-421A7D89B70F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
