@@ -26,13 +26,7 @@ namespace Accounting
 
             var yearMonthStart = Convert.ToInt32(start.ToString("yyyyMM"));
             var yearMonthEnd = Convert.ToInt32(end.ToString("yyyyMM"));
-            var budgetList = _budgetRepo.GetAll().Select(budget => new
-                {
-                    YearMonth = Convert.ToInt32(budget.YearMonth),
-                    budget.Amount
-                })
-                .Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
-                .ToList();
+            var budgetList = QueryBudgetRepo(yearMonthStart, yearMonthEnd);
 
             if (!budgetList.Any())
             {
@@ -62,6 +56,17 @@ namespace Accounting
             return budgetSum;
         }
 
+        private List<QueryBudget> QueryBudgetRepo(int yearMonthStart, int yearMonthEnd)
+        {
+            return _budgetRepo.GetAll().Select(budget => new QueryBudget
+                {
+                    YearMonth = Convert.ToInt32(budget.YearMonth),
+                    Amount = budget.Amount
+                })
+                .Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
+                .ToList();
+        }
+
         private DateTime GetStartDayOfMonth(DateTime end)
         {
             return new DateTime(end.Year, end.Month, 1);
@@ -84,5 +89,11 @@ namespace Accounting
         {
             return end.DayOfYear - start.DayOfYear + 1;
         }
+    }
+
+    public class QueryBudget
+    {
+        public int YearMonth { get; set; }
+        public int Amount { get; set; }
     }
 }
