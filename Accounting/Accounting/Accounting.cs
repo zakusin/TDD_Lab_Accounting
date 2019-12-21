@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,40 +22,33 @@ namespace Accounting
                 return 0;
             }
 
-            var budgetList = _budgetRepo.GetAll();
-
-            var days = QueryDays(start, end);
-
             var yearMonthStart = Convert.ToInt32(start.ToString("yyyyMM"));
-            var yearMonthEnd =  Convert.ToInt32(end.ToString("yyyyMM"));
-
-            var amountList = budgetList.Select(budget => new
-            {
-                YearMonth = Convert.ToInt32(budget.YearMonth),
-                Amount = budget.Amount
-            }).Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
+            var yearMonthEnd = Convert.ToInt32(end.ToString("yyyyMM"));
+            var budgetList = _budgetRepo.GetAll().Select(budget => new
+                {
+                    YearMonth = Convert.ToInt32(budget.YearMonth),
+                    budget.Amount
+                })
+                .Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
                 .ToList();
+
             if (yearMonthStart == yearMonthEnd)
             {
-
-                var daysInMonth = DateTime.DaysInMonth(start.Year, start.Month);
-                return (amountList.FirstOrDefault()?.Amount ?? 0) * days / daysInMonth;
+                var budgetAmount = budgetList.FirstOrDefault()?.Amount ?? 0;
+                var budgetSum = CalculateBudgetSum(start, end, budgetAmount);
+                return budgetSum;
             }
-            
+
             var sum = 0m;
-            foreach (var budget in amountList)
+            foreach (var budget in budgetList)
             {
                 if (budget.YearMonth == yearMonthStart)
                 {
-                    var daysInMonth = DateTime.DaysInMonth(start.Year, start.Month);
-                    days = QueryDays(start, new DateTime(start.Year, start.Month, 1).AddMonths(1).AddDays(-1));
-                    sum += budget.Amount * days / daysInMonth;
+                    sum += CalculateBudgetSum(start, GetEndDayOfMonth(start), budget.Amount);
                 }
-                else if(budget.YearMonth == yearMonthEnd)
+                else if (budget.YearMonth == yearMonthEnd)
                 {
-                    var daysInMonth = DateTime.DaysInMonth(end.Year, end.Month);
-                    days = QueryDays(new DateTime(end.Year,end.Month,1), end);
-                    sum += budget.Amount * days / daysInMonth;
+                    sum += CalculateBudgetSum(GetStartDayOfMonth(end), end, budget.Amount);
                 }
                 else
                 {
@@ -63,6 +57,24 @@ namespace Accounting
             }
 
             return sum;
+        }
+
+        private static DateTime GetStartDayOfMonth(DateTime end)
+        {
+            return new DateTime(end.Year, end.Month, 1);
+        }
+
+        private static DateTime GetEndDayOfMonth(DateTime start)
+        {
+            return new DateTime(start.Year, start.Month, 1).AddMonths(1).AddDays(-1);
+        }
+
+        private static int CalculateBudgetSum(DateTime start, DateTime end, int budgetAmount)
+        {
+            var daysInMonth = DateTime.DaysInMonth(start.Year, start.Month);
+            var days = QueryDays(start, end);
+            var budgetSum = budgetAmount * days / daysInMonth;
+            return budgetSum;
         }
 
         private static int QueryDays(DateTime start, DateTime end)
