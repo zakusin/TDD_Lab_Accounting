@@ -1,6 +1,0 @@
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\bin\Debug\Accounting.dll
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\bin\Debug\Accounting.pdb
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\obj\Debug\Accounting.csprojAssemblyReference.cache
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\obj\Debug\Accounting.csproj.CoreCompileInputs.cache
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\obj\Debug\Accounting.dll
-C:\Users\zakus\Desktop\Repo\TDD_Lab_Accounting\Accounting\Accounting\obj\Debug\Accounting.pdb
