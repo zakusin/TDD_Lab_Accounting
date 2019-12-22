@@ -6,17 +6,17 @@ namespace Accounting
     {
         public string YearMonth { get; set; }
         public int Amount { get; set; }
-        private DateTime BudgetFirstDay => DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null);
-        private DateTime BudgetLastDay => BudgetFirstDay.AddMonths(1).AddDays(-1);
-        private int BudgetDays => DateTime.DaysInMonth(BudgetFirstDay.Year, BudgetFirstDay.Month);
+        private DateTime FirstDay => DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null);
+        private DateTime LastDay => DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null).AddMonths(1).AddDays(-1);
+        private int BudgetDays => DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
 
-        public decimal EffectiveBudget(DateTime start, DateTime end)
+        public decimal GetEffectiveBudget(DateTime start, DateTime end)
         {
-            var effectiveStartDate = start < BudgetFirstDay 
-                ? BudgetFirstDay 
+            var effectiveStartDate = start < FirstDay
+                ? FirstDay
                 : start;
-            var effectiveEndDate = end > BudgetLastDay 
-                ? BudgetLastDay 
+            var effectiveEndDate = end > LastDay
+                ? LastDay
                 : end;
             var effectiveDays = (effectiveEndDate - effectiveStartDate).Days + 1;
             return Amount * effectiveDays / BudgetDays;

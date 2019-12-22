@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Accounting
 {
@@ -26,7 +24,7 @@ namespace Accounting
 
             var budgetList = QueryBudgetRepo(start, end);
 
-            return budgetList.Sum(budget => budget.EffectiveBudget(start, end));
+            return budgetList.Sum(budget => budget.GetEffectiveBudget(start, end));
         }
 
         private List<Budget> QueryBudgetRepo(DateTime start, DateTime end)
