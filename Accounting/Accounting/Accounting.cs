@@ -26,12 +26,7 @@ namespace Accounting
 
             var budgetList = QueryBudgetRepo(start, end);
 
-            foreach (var budget in budgetList)
-            {
-                budgetSum += budget.EffectiveBudget(start, end);
-            }
-
-            return budgetSum;
+            return budgetList.Sum(budget => budget.EffectiveBudget(start, end));
         }
 
         private List<Budget> QueryBudgetRepo(DateTime start, DateTime end)
