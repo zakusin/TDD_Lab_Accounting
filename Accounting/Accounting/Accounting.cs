@@ -24,76 +24,25 @@ namespace Accounting
                 return budgetSum;
             }
 
-            var yearMonthStart = Convert.ToInt32(start.ToString("yyyyMM"));
-            var yearMonthEnd = Convert.ToInt32(end.ToString("yyyyMM"));
-            var budgetList = QueryBudgetRepo(yearMonthStart, yearMonthEnd);
+            var budgetList = QueryBudgetRepo(start, end);
 
-            if (!budgetList.Any())
-            {
-                return budgetSum;
-            }
-            
             foreach (var budget in budgetList)
             {
-                if (yearMonthStart == yearMonthEnd)
-                {
-                    budgetSum += CalculateBudgetSum(start, end, budget?.Amount ?? 0);
-                }
-                else if (budget.YearMonth == yearMonthStart)
-                {
-                    budgetSum += CalculateBudgetSum(start, GetLastDay(start), budget.Amount);
-                }
-                else if (budget.YearMonth == yearMonthEnd)
-                {
-                    budgetSum += CalculateBudgetSum(GetFirstDay(end), end, budget.Amount);
-                }
-                else
-                {
-                    budgetSum += budget.Amount;
-                }
+                budgetSum += budget.EffectiveBudget(start, end);
             }
 
             return budgetSum;
         }
 
-        private List<QueryBudget> QueryBudgetRepo(int yearMonthStart, int yearMonthEnd)
+        private List<Budget> QueryBudgetRepo(DateTime start, DateTime end)
         {
-            return _budgetRepo.GetAll().Select(budget => new QueryBudget
-                {
-                    YearMonth = Convert.ToInt32(budget.YearMonth),
-                    Amount = budget.Amount
-                })
-                .Where(r => r.YearMonth >= yearMonthStart && r.YearMonth <= yearMonthEnd)
+            var yearMonthStart = start.ToString("yyyyMM");
+            var yearMonthEnd = end.ToString("yyyyMM");
+            var budgetList = _budgetRepo.GetAll()
+                .Where(r => string.CompareOrdinal(r.YearMonth, yearMonthStart) >= 0
+                            && string.CompareOrdinal(r.YearMonth, yearMonthEnd) <= 0)
                 .ToList();
+            return budgetList;
         }
-
-        private DateTime GetFirstDay(DateTime end)
-        {
-            return new DateTime(end.Year, end.Month, 1);
-        }
-
-        private DateTime GetLastDay(DateTime start)
-        {
-            return new DateTime(start.Year, start.Month, 1).AddMonths(1).AddDays(-1);
-        }
-
-        private int CalculateBudgetSum(DateTime start, DateTime end, int budgetAmount)
-        {
-            var daysInMonth = DateTime.DaysInMonth(start.Year, start.Month);
-            var days = CalculateDiffDays(start, end);
-            var budgetSum = budgetAmount * days / daysInMonth;
-            return budgetSum;
-        }
-
-        private int CalculateDiffDays(DateTime start, DateTime end)
-        {
-            return end.DayOfYear - start.DayOfYear + 1;
-        }
-    }
-
-    public class QueryBudget
-    {
-        public int YearMonth { get; set; }
-        public int Amount { get; set; }
     }
 }
